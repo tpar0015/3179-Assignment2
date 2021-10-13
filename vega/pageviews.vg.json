@@ -1,0 +1,53 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "title": "Pageviews per Month, 2008-2013",
+    "data": {"url": "data/pivoted_pageviews.csv"},
+    "vconcat": [{
+            "width": 1200,
+            "height": 400,
+            "mark": "line",
+            "encoding": {
+                "x": {
+                    "field": "date",
+                    "type": "temporal",
+                    "timeUnit": "yearmonth",
+                    "scale": {"domain": {"param": "brush"}}
+                },
+                "y": {
+                    "field": "pageviews",
+                    "type": "quantitative",
+                    "aggregate": "sum"
+                },
+                "color": {
+                    "field": "domain", "type": "nominal"
+                }
+            }
+        },
+        {
+            "width": 1200,
+            "height": 100,
+            "mark": "line",
+            "params": [{
+                "name": "brush",
+                "select": {"type": "interval", "encodings": ["x"]}
+            }],
+            "encoding": {
+                "x": {
+                    "field": "date",
+                    "type": "temporal",
+                    "timeUnit": "yearmonth"
+                },
+                "y": {
+                    "field": "pageviews",
+                    "type": "quantitative",
+                    "aggregate": "sum"
+                },
+                "color": {
+                    "field": "domain", "type": "nominal"
+                }
+            }
+
+        }
+    ]
+
+}

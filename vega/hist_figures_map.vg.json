@@ -1,0 +1,106 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "width": 1200,
+    "height": 800,
+    "title": "Historical Figures Throughout History",
+    "projection": {"type": "equalEarth"},
+    "params": [
+        {
+            "name": "HPI_Minimum",
+            "value": 80,
+            "bind": {
+                "input": "range",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "name": "Minimum HPI: "
+            }
+        },
+        {
+            "name": "domain_selector",
+            "bind": {
+                "input": "select",
+                "options": [
+                    null,
+                    "Arts",
+                    "Business & Law",
+                    "Exploration",
+                    "Humanities",
+                    "Institutions",
+                    "Public Figure",
+                    "Science & Technology"
+                ]
+            }
+        }
+    ],
+    "layer": [
+        {
+            "data": {
+                "url": "data/custom.topo.json",
+                "format": {"type": "topojson","feature": "custom.geo"}
+            },
+            "mark": {"type": "geoshape", "fill":"gray", "stroke": "white"}
+        },
+        {
+            "data": {
+                "url": "data/database.csv"
+            },
+            "transform": [
+                {"filter": "datum.HPI > HPI_Minimum"},
+                {"filter": "domain_selector == null || datum.domain == domain_selector"}
+            ],
+            "mark": {"type": "circle","tooltip":{"content": "data"}},
+            "encoding": {
+                "longitude": {"field": "longitude", "type": "quantitative"},
+                "latitude": {"field": "latitude", "type":"quantitative"},
+                "size": {
+                    "field": "HPI",
+                    "type": "quantitative",
+                    "scale": {
+                        "domain": [20, 40, 70, 90, 100],
+                        "range": [1, 10, 50, 100, 400]
+
+                    }
+                },
+                "color": {
+                    "field": "domain",
+                    "type": "nominal",
+                    "scale": {
+                        "domain": [
+                            "Arts",
+                            "Business & Law",
+                            "Exploration",
+                            "Humanities",
+                            "Institutions",
+                            "Public Figure",
+                            "Science & Technology"
+                        ],
+                        "range": [
+                        "#20005c",
+                        "#7b005c",
+                        "#bc0046",
+                        "#e22f1c",
+                        "#e77e00",
+                        "#cbc200",
+                        "#80ff00"            
+                    ]
+                    }
+                },
+                "opacity": {
+                    "value": 0.9
+                },
+                "tooltip": [
+                    {"field": "full_name", "type": "nominal", "title": "Name"},
+                    {"field": "birth_year", "type": "nominal", "title": "Birth Year"},
+                    {"field": "occupation", "type": "nominal", "title": "Occupation"},
+                    {"field": "country", "type": "nominal", "title": "Country"},
+                    {"field": "city", "type": "nominal", "title": "City"},
+                    {"field": "HPI", "type": "quantitative", "title": "Historical Popularity Index"}
+                    
+                ]
+
+            }
+        }
+
+    ]
+}
