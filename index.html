@@ -5,11 +5,26 @@
         <!-- Import Vega & Vega-Lite-->
         <script src="https://cdn.jsdelivr.net/npm/vega@5.20.2"></script>
         <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.1.0"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-lite-api@5.0.0"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-tooltip"></script>
         <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.17.0"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-tooltip"></script>
     </head>
     <body>
+        <div class="search">
+            <input id = "search" type="text" placeholder="Search..">
+            <button id="search_button">Go</button>
+        </div>
+        <div id="view"></div>
+        
         <div id="hist_figures"></div>
         <div id="pageviews"></div>
+
+
+
+
         <script type="text/javascript">
             var spec = "vega/hist_figures_map.vg.json";
             vegaEmbed('#hist_figures', spec, opt = {
@@ -25,5 +40,6 @@
                 // Access the Vega view instance (https://vega.github.io/vega/docs/api/view/) as result.view
             }).catch(console.error);
         </script>
+        <script src="vega/index.js"></script>
     </body>
 </html>
