@@ -13,9 +13,65 @@
         <script src="https://cdn.jsdelivr.net/npm/vega-tooltip"></script>
     </head>
     <body>
-        <div class="search">
-            <input id = "search" type="text" placeholder="Search..">
-            <button id="search_button">Go</button>
+        <div id="top50">
+            <input id="top50_input" list="top50_dl" placeholder="Search...">
+            <button id="top_50_go" >Go!</button>
+                <datalist id="top50_dl">
+                    <option value="Muhammad">
+                    <option value="Genghis Khan">
+                    <option value="Leonardo da Vinci">
+                    <option value="Isaac Newton">
+                    <option value="Ludwig van Beethoven">
+                    <option value="Alexander the Great">
+                    <option value="Aristotle">
+                    <option value="Napoleon">
+                    <option value="Julius Caesar">
+                    <option value="Wolfgang Amadeus Mozart">
+                    <option value="Plato">
+                    <option value="Jesus">
+                    <option value="Adolf Hitler">
+                    <option value="Galileo Galilei">
+                    <option value="Marco Polo">
+                    <option value="Socrates">
+                    <option value="Donald Trump">
+                    <option value="Johann Sebastian Bach">
+                    <option value="Albert Einstein">
+                    <option value="Michelangelo">
+                    <option value="William Shakespeare">
+                    <option value="Martin Luther">
+                    <option value="Christopher Columbus">
+                    <option value="Moses">
+                    <option value="Archimedes">
+                    <option value="Abraham">
+                    <option value="Sigmund Freud">
+                    <option value="Confucius">
+                    <option value="Vincent van Gogh">
+                    <option value="Nicolaus Copernicus">
+                    <option value="Ferdinand Magellan">
+                    <option value="Gautama Buddha">
+                    <option value="Che Guevara">
+                    <option value="Louis XIV of France">
+                    <option value="Augustus">
+                    <option value="Charles Darwin">
+                    <option value="Karl Marx">
+                    <option value="Mary, mother of Jesus">
+                    <option value="Immanuel Kant">
+                    <option value="Elizabeth II">
+                    <option value="Saint Peter">
+                    <option value="Dante Alighieri">
+                    <option value="René Descartes">
+                    <option value="Thomas Jefferson">
+                    <option value="Joseph Stalin">
+                    <option value="Thomas Edison">
+                    <option value="Vladimir Lenin">
+                    <option value="Avicenna">
+                    <option value="Joan of Arc">
+                    <option value="Vasco da Gama"> 
+                </datalist>
+            <img id = "fig_img" src= ""> 
+            <div id="top50_description">
+                
+            </div>
         </div>
         <div id="view"></div>
         
@@ -33,13 +89,15 @@
                 // Access the Vega view instance (https://vega.github.io/vega/docs/api/view/) as result.view
             }).catch(console.error);
 
-            var spec1 = "vega/pageviews.vg.json";
-            vegaEmbed('#pageviews', spec1, opt = {
-                renderer: "svg",
-            }).then(function (result) {
-                // Access the Vega view instance (https://vega.github.io/vega/docs/api/view/) as result.view
-            }).catch(console.error);
+            // var spec1 = "vega/pageviews.vg.json";
+            // vegaEmbed('#pageviews', spec1, opt = {
+            //     renderer: "svg",
+            // }).then(function (result) {
+            //     // Access the Vega view instance (https://vega.github.io/vega/docs/api/view/) as result.view
+            // }).catch(console.error);
         </script>
+        <script src="data/top50descriptions/descriptions.js"></script>
         <script src="vega/index.js"></script>
+        <script src="vega/top.js"></script>
     </body>
 </html>
