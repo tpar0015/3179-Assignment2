@@ -1,32 +1,62 @@
 {
     "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-    "title": "Pageviews per Month, 2008-2013",
     "data": {"url": "data/pivoted_pageviews.csv"},
+    "background": "null",
+    "title": "Average Pageviews per Month",
+    "config": {
+        "legend": {
+            "labelFont": "Open Sans",
+            "titleFont": "Open Sans",
+            "titleColor": "white",
+            "labelColor": "white",
+            "titleFontSize": 15,
+            "titleFontWeight": 300
+        },
+        "axis": {
+            "labelFont": "Open Sans",
+            "titleFont": "Open Sans",
+            "titleColor": "white",
+            "labelColor": "white",
+            "titleFontSize": 15,
+            "titleFontWeight": 300,
+            "gridOpacity": 0.3
+        },
+        "title": {
+            "font": "Open Sans",
+            "color": "white",
+            "fontSize": 25,
+            "fontWeight": 300
+        }
+    },
     "vconcat": [{
-            "width": 1200,
+            "width": "container",
             "height": 400,
-            "mark": "line",
+            "mark": "area",
             "encoding": {
                 "x": {
                     "field": "date",
                     "type": "temporal",
                     "timeUnit": "yearmonth",
-                    "scale": {"domain": {"param": "brush"}}
+                    "scale": {"domain": {"param": "brush"}},
+                    "title": "Date"
                 },
                 "y": {
                     "field": "pageviews",
                     "type": "quantitative",
-                    "aggregate": "sum"
+                    "aggregate": "average",
+                    "stack": "center",
+                    "title": "Average Pageviews"
                 },
                 "color": {
-                    "field": "domain", "type": "nominal"
+                    "field": "domain", "type": "nominal",
+                    "title": "Domain"
                 }
             }
         },
         {
-            "width": 1200,
-            "height": 100,
-            "mark": "line",
+            "width": "container",
+            "height": 60,
+            "mark": "area",
             "params": [{
                 "name": "brush",
                 "select": {"type": "interval", "encodings": ["x"]}
@@ -35,12 +65,15 @@
                 "x": {
                     "field": "date",
                     "type": "temporal",
-                    "timeUnit": "yearmonth"
+                    "timeUnit": "yearmonth",
+                    "title": "Date"
                 },
                 "y": {
                     "field": "pageviews",
                     "type": "quantitative",
-                    "aggregate": "sum"
+                    "aggregate": "average",
+                    "stack": "center",
+                    "title": ""
                 },
                 "color": {
                     "field": "domain", "type": "nominal"

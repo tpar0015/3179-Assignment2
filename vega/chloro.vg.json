@@ -1,0 +1,125 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "projection": {
+        "type": "equirectangular"
+    },
+    "title": "Average HPI for Different Occupations",
+    "background": "null",
+    "width": "container",
+    "height": 500,
+    "config": {
+        "legend": {
+            "labelFont": "Open Sans",
+            "titleFont": "Open Sans",
+            "titleColor": "white",
+            "labelColor": "white",
+            "titleFontSize": 15,
+            "titleFontWeight": 300
+        },
+        "axis": {
+            "labelFont": "Open Sans",
+            "titleFont": "Open Sans",
+            "titleColor": "white",
+            "labelColor": "white",
+            "titleFontSize": 15,
+            "titleFontWeight": 300,
+            "gridOpacity": 1
+        },
+        "title": {
+            "font": "Open Sans",
+            "color": "white",
+            "fontSize": 25,
+            "fontWeight": 300,
+            "anchor": "middle",
+            "orient": "top"
+        }
+    },
+    "layer": [
+        {
+            "data": {
+                "url": "data\\ne_110m_admin_0_countries.topo.json",
+                "format": {
+                    "type": "topojson",
+                    "feature": "ne_110m_admin_0_countries"
+                }
+            },
+            "mark": {
+                "type": "geoshape", "fill":"#AEAEAE", "stroke": "grey"
+
+            }
+        },
+        {
+            "data": {
+                "url": "data/database.csv"
+            },
+            "params": [
+                {
+                    "name": "job_select",
+                    "select": {
+                        "type": "point",
+                        "fields": [
+                            "occupation"
+                        ]
+                    },
+                    "bind": {
+                        "input": null,
+                        "element": "#occupation_select"
+                    }
+                }
+            ],
+            "transform": [
+                {
+                    "lookup": "country",
+                    "from": {
+                        "data": {
+                            "url": "data\\ne_110m_admin_0_countries.topo.json",
+                            "format": {
+                                "type": "topojson",
+                                "feature": "ne_110m_admin_0_countries"
+                            }
+                        },
+                        "key": "properties.NAME"
+                    },
+                    "as": "geo"
+                },
+                {
+                    "filter": "datum.occupation == job_select_occupation"
+                }
+            ],
+            "mark": {
+                "type": "geoshape"
+            },
+            "encoding": {
+                "shape": {
+                    "field": "geo",
+                    "type": "geojson"
+                },
+                "color": {
+                    "field": "HPI",
+                    "aggregate": "average",
+                    "type": "quantitative",
+                    "scale": {}
+                },
+                "tooltip": [
+                    {
+                        "field": "country",
+                        "type": "nominal",
+                        "title": "Country: "
+                    },
+                    {
+                        "field": "occupation",
+                        "type": "nominal",
+                        "title": "Occupation: "
+                    },
+
+                    {
+                    "field": "HPI",
+                    "type": "quantitative",
+                    "title": "HPI: "
+                    }
+
+                ]
+            }
+        }
+    ]
+}

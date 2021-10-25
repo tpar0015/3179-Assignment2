@@ -1,106 +1,423 @@
 {
-    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-    "width": 1200,
-    "height": 800,
-    "title": "Historical Figures Throughout History",
-    "projection": {"type": "equalEarth"},
-    "params": [
+    "$schema": "https://vega.github.io/schema/vega/v5.json",
+    "description": "An interactive world map supporting pan and zoom.",
+    "width": 200,
+    "height": 200,
+    "padding": 20,
+    "autosize": "pad",
+    "signals": [
         {
-            "name": "HPI_Minimum",
-            "value": 80,
-            "bind": {
-                "input": "range",
-                "min": 0,
-                "max": 100,
-                "step": 5,
-                "name": "Minimum HPI: "
+            "name": "tx",
+            "update": "width / 2"
+        },
+        {
+            "name": "ty",
+            "update": "height / 2"
+        },
+        {
+            "name": "scale",
+            "value": 150,
+            "on": [
+                {
+                    "events": {
+                        "type": "wheel",
+                        "consume": true
+                    },
+                    "update": "clamp(scale * pow(1.0005, -event.deltaY * pow(16, event.deltaMode)), 150, 3000)"
+                }
+            ]
+        },
+        {
+            "name": "angles",
+            "value": [
+                0,
+                0
+            ],
+            "on": [
+                {
+                    "events": "mousedown",
+                    "update": "[rotateX, centerY]"
+                }
+            ]
+        },
+        {
+            "name": "cloned",
+            "value": null,
+            "on": [
+                {
+                    "events": "mousedown",
+                    "update": "copy('projection')"
+                }
+            ]
+        },
+        {
+            "name": "start",
+            "value": null,
+            "on": [
+                {
+                    "events": "mousedown",
+                    "update": "invert(cloned, xy())"
+                }
+            ]
+        },
+        {
+            "name": "drag",
+            "value": null,
+            "on": [
+                {
+                    "events": "[mousedown, window:mouseup] > window:mousemove",
+                    "update": "invert(cloned, xy())"
+                }
+            ]
+        },
+        {
+            "name": "delta",
+            "value": null,
+            "on": [
+                {
+                    "events": {
+                        "signal": "drag"
+                    },
+                    "update": "[drag[0] - start[0], start[1] - drag[1]]"
+                }
+            ]
+        },
+        {
+            "name": "rotateX",
+            "value": 0,
+            "on": [
+                {
+                    "events": {
+                        "signal": "delta"
+                    },
+                    "update": "angles[0] + delta[0]"
+                }
+            ]
+        },
+        {
+            "name": "centerY",
+            "value": 0,
+            "on": [
+                {
+                    "events": {
+                        "signal": "delta"
+                    },
+                    "update": "clamp(angles[1] + delta[1], -60, 60)"
+                }
+            ]
+        },
+        {
+            "name": "clear",
+            "value": true,
+            "on": [
+                {
+                    "events": "mouseup[!event.item]",
+                    "update": "true",
+                    "force": true
+                }
+            ]
+        },
+        {
+            "name": "shift",
+            "value": false,
+            "on": [
+                {
+                    "events": "@legendSymbol:click, @legendLabel:click",
+                    "update": "event.shiftKey",
+                    "force": true
+                }
+            ]
+        },
+        {
+            "name": "clicked",
+            "value": null,
+            "on": [
+                {
+                    "events": "@legendSymbol:click, @legendLabel:click",
+                    "update": "{value: datum.value}",
+                    "force": true
+                }
+            ]
+        }
+    ],
+    "projections": [
+        {
+            "name": "projection",
+            "type": "mercator",
+            "scale": {
+                "signal": "scale"
+            },
+            "rotate": [
+                {
+                    "signal": "rotateX"
+                },
+                0,
+                0
+            ],
+            "center": [
+                0,
+                {
+                    "signal": "centerY"
+                }
+            ],
+            "translate": [
+                {
+                    "signal": "tx"
+                },
+                {
+                    "signal": "ty"
+                }
+            ]
+        }
+    ],
+    "data": [
+        {
+            "name": "world",
+            "url": "data/world.topo.json",
+            "format": {
+                "type": "topojson",
+                "feature": "world.geo"
             }
         },
         {
-            "name": "domain_selector",
-            "bind": {
-                "input": "select",
-                "options": [
-                    null,
-                    "Arts",
-                    "Business & Law",
-                    "Exploration",
-                    "Humanities",
-                    "Institutions",
-                    "Public Figure",
-                    "Science & Technology"
-                ]
+            "name": "graticule",
+            "transform": [
+                {
+                    "type": "graticule",
+                    "step": [
+                        15,
+                        15
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "db",
+            "url": "data/database.csv",
+            "format": {
+                "type": "csv",
+                "parse": "auto"
+            },
+            "transform": [
+                {
+                    "type": "geopoint",
+                    "projection": "projection",
+                    "fields": [
+                        "longitude",
+                        "latitude"
+                    ]
+                },
+                {
+                    "type": "filter",
+                    "expr": "datum.latitude != null && datum.longitude != null"
+                },
+                {
+                    "type": "filter",
+                    "expr": "datum.HPI > 74"
+                }
+            ]
+        },
+        {
+            "name": "selected",
+            "on": [
+                {
+                    "trigger": "clear",
+                    "remove": true
+                },
+                {
+                    "trigger": "!shift",
+                    "remove": true
+                },
+                {
+                    "trigger": "!shift && clicked",
+                    "insert": "clicked"
+                },
+                {
+                    "trigger": "shift && clicked",
+                    "toggle": "clicked"
+                }
+            ]
+        }
+    ],
+    "scales": [
+        {
+            "name": "size",
+            "type": "log",
+            "domain": {
+                "data": "db",
+                "field": "HPI"
+            },
+            "range": [
+                10,
+                500
+            ]
+        },
+        {
+            "name": "color",
+            "type": "ordinal",
+            "domain": {
+                "data": "db",
+                "field": "domain"
+            },
+            "range": {
+                "scheme": "tableau10"
             }
         }
     ],
-    "layer": [
+    "legends": [
         {
-            "data": {
-                "url": "data/custom.topo.json",
-                "format": {"type": "topojson","feature": "custom.geo"}
-            },
-            "mark": {"type": "geoshape", "fill":"gray", "stroke": "white"}
-        },
-        {
-            "data": {
-                "url": "data/database.csv"
-            },
-            "transform": [
-                {"filter": "datum.HPI > HPI_Minimum"},
-                {"filter": "domain_selector == null || datum.domain == domain_selector"}
-            ],
-            "mark": {"type": "circle","tooltip":{"content": "data"}},
-            "encoding": {
-                "longitude": {"field": "longitude", "type": "quantitative"},
-                "latitude": {"field": "latitude", "type":"quantitative"},
-                "size": {
-                    "field": "HPI",
-                    "type": "quantitative",
-                    "scale": {
-                        "domain": [20, 40, 70, 90, 100],
-                        "range": [1, 10, 50, 100, 400]
-
-                    }
-                },
-                "color": {
-                    "field": "domain",
-                    "type": "nominal",
-                    "scale": {
-                        "domain": [
-                            "Arts",
-                            "Business & Law",
-                            "Exploration",
-                            "Humanities",
-                            "Institutions",
-                            "Public Figure",
-                            "Science & Technology"
+            "stroke": "color",
+            "fill": "color",
+            "title": "Domain",
+            "titleFont": "Open Sans",
+            "titleFontSize": 25,
+            "titleColor": "#fff",
+            "titleFontWeight": 400,
+            "labelFont": "Open Sans",
+            "labelFontSize": 15,
+            "labelColor": "#fff",
+            "orient": "none",
+            "legendY": -350,
+            "legendX": 600,
+            "encode": {
+                "symbols": {
+                    "name": "legendSymbol",
+                    "interactive": true,
+                    "update": {
+                        "strokeWidth": {
+                            "value": 2
+                        },
+                        "opacity": [
+                            {
+                                "test": "!length(data('selected')) || indata('selected', 'value', datum.value)",
+                                "value": 0.9
+                            },
+                            {
+                                "value": 0.15
+                            }
                         ],
-                        "range": [
-                        "#20005c",
-                        "#7b005c",
-                        "#bc0046",
-                        "#e22f1c",
-                        "#e77e00",
-                        "#cbc200",
-                        "#80ff00"            
-                    ]
+                        "size": {
+                            "value": 64
+                        }
                     }
                 },
-                "opacity": {
-                    "value": 0.9
-                },
-                "tooltip": [
-                    {"field": "full_name", "type": "nominal", "title": "Name"},
-                    {"field": "birth_year", "type": "nominal", "title": "Birth Year"},
-                    {"field": "occupation", "type": "nominal", "title": "Occupation"},
-                    {"field": "country", "type": "nominal", "title": "Country"},
-                    {"field": "city", "type": "nominal", "title": "City"},
-                    {"field": "HPI", "type": "quantitative", "title": "Historical Popularity Index"}
-                    
-                ]
-
+                "labels": {
+                    "name": "legendLabel",
+                    "interactive": true,
+                    "update": {
+                        "opacity": [
+                            {
+                                "test": "!length(data('selected')) || indata('selected', 'value', datum.value)",
+                                "value": 1
+                            },
+                            {
+                                "value": 0.25
+                            }
+                        ]
+                    }
+                }
             }
         }
+    ],
+    "marks": [
+        {
+            "type": "shape",
+            "from": {
+                "data": "graticule"
+            },
+            "encode": {
+                "enter": {
+                    "strokeWidth": {
+                        "value": 1
+                    },
+                    "stroke": {
+                        "value": "#ddd"
+                    },
+                    "fill": {
+                        "value": null
+                    }
+                }
+            },
+            "transform": [
+                {
+                    "type": "geoshape",
+                    "projection": "projection"
+                }
+            ]
+        },
+        {
+            "type": "shape",
+            "from": {
+                "data": "world"
+            },
+            "encode": {
+                "enter": {
+                    "strokeWidth": {
+                        "value": 0.5
+                    },
+                    "stroke": {
+                        "value": "grey"
+                    },
+                    "fill": {
+                        "value": "#AEAEAE"
+                    }
+                }
+            },
+            "transform": [
+                {
+                    "type": "geoshape",
+                    "projection": "projection"
+                }
+            ]
+        },
+        {
+            "type": "symbol",
+            "from": {
+                "data": "db"
+            },
 
+            "encode": {
+                "enter": {
+                    "size": {
+                        "scale": "size",
+                        "field": "HPI"
+                    },
+                    "stroke": {
+                        "value": "#3ab3c"
+                    }
+                    
+                },
+
+                "update": {
+                    "x": {
+                        "field": "x"
+                    },
+                    "y": {
+                        "field": "y"
+                    },
+                    "fill": [
+                        {
+                            "test": "(!length(data('selected')) || indata('selected', 'value', datum.domain))",
+                            "scale": "color",
+                            "field": "domain"
+                        }
+                    ],
+                    "opacity": [
+                        {
+                            "test": "(!length(data('selected')) || indata('selected', 'value', datum.domain))",
+                            "value": 0.9
+                        },
+                        {"value": 0.15}
+                    ],
+                    "tooltip": [
+                        {
+                        "test": "(!length(data('selected')) || indata('selected', 'value', datum.domain))",
+                        "signal": "{title: datum.full_name,'HPI': datum.HPI,'Occupation':datum.occupation,'Birth Year':datum.birth_year,'City':datum.city}"
+                        }
+                    ]
+
+                }
+            }
+        }
     ]
 }

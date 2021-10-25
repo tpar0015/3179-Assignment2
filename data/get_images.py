@@ -35,9 +35,12 @@ for i in range(len(top_50)):
     filtered_link = filtered_link.replace(')','%29')
 
     og_file_link = re.search("//upload.wikimedia.org/wikipedia/commons/(\w|\d)+/(\w|\d)+/" + filtered_link[5:],r_next.text)
-    print(og_file_link.group())
+    headers = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.81 Safari/537.36',
+        'referer': url + elem}
 
-    response = requests.get("https:" + og_file_link.group(), stream=True,allow_redirects=True)
+    response = requests.get("https:" + og_file_link.group(), stream=True,allow_redirects=True, headers = headers)
+    print(elem, response.status_code)
+
     try: 
         with open(f"data\\top50images\\{elem}.{link.group()[-3:]}",'wb') as img:
             for chunk in response:

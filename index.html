@@ -1,103 +1,254 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>FIT3178 - Data Visualisation 2</title>
-        <!-- Import Vega & Vega-Lite-->
-        <script src="https://cdn.jsdelivr.net/npm/vega@5.20.2"></script>
-        <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.1.0"></script>
-        <script src="https://cdn.jsdelivr.net/npm/vega-lite-api@5.0.0"></script>
-        <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
-        <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
-        <script src="https://cdn.jsdelivr.net/npm/vega-tooltip"></script>
-        <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.17.0"></script>
-        <script src="https://cdn.jsdelivr.net/npm/vega-tooltip"></script>
-    </head>
-    <body>
+
+<head>
+    <title>FIT3178 - Data Visualisation 2</title>
+    <!-- Import Vega & Vega-Lite-->
+    <script src="https://cdn.jsdelivr.net/npm/vega@5.20.2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.1.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite-api@5.0.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-tooltip"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.17.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-tooltip"></script>
+    <link rel="stylesheet" href="styles/style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+    <div>
+        <header class="header">Historical Figures</header>
+        <p class="subheading2">FIT3179 - Assignment 2 - Thomas Pardy</p>
+    </div>
+    <p class='p_text'>The main metric used in these visualisations is called the HPI, Historical Popularity Index, it is
+        calculated by aggregrating information on an individuals online Popularity. It is currently made up of five
+        components: age, number Wikipedia language editions, the concentration of pageviews across languages, the
+        stability of pageviews over time, and the number of non-English pageviews. It was derived by the people at
+        https://pantheon.world/ as well as the data source used in this project.</p>
+    <div class="subheading">Birth Places of Historical Figures
+        <p class='subnote'>Zoom for more detail, legend for filtering.</p>
+    </div>
+    <div id="map" class="map">
+    </div>
+    <p class="subheading">Domain Breakdown</p>
+    <div class="domain_container">
+        <div id="stream" class="stream_graph"></div>
+        <div id="pie" class="domain_pie"></div>
+    </div>
+    <p class="subheading">Occupation Breakdown</p>
+    <div class="occupation_container">
+        <input id="occupation_select" list="occupation_dl" class="search_input" placeholder="Search Jobs...">
+
+        <datalist id="occupation_dl" name="occupation_dl">
+            <option value = 'Philosopher' class='job_option'>Philosopher</option>
+            <option value = 'Religious Figure' class='job_option'>Religious Figure</option>
+            <option value = 'Military Personnel' class='job_option'>Military Personnel</option>
+            <option value = 'Inventor' class='job_option'>Inventor</option>
+            <option value = 'Politician' class='job_option'>Politician</option>
+            <option value = 'Writer' class='job_option'>Writer</option>
+            <option value = 'Mathematician' class='job_option'>Mathematician</option>
+            <option value = 'Composer' class='job_option'>Composer</option>
+            <option value = 'Painter' class='job_option'>Painter</option>
+            <option value = 'Physicist' class='job_option'>Physicist</option>
+            <option value = 'Explorer' class='job_option'>Explorer</option>
+            <option value = 'Astronomer' class='job_option'>Astronomer</option>
+            <option value = 'Historian' class='job_option'>Historian</option>
+            <option value = 'Economist' class='job_option'>Economist</option>
+            <option value = 'Physician' class='job_option'>Physician</option>
+            <option value = 'Psychologist' class='job_option'>Psychologist</option>
+            <option value = 'Companion' class='job_option'>Companion</option>
+            <option value = 'Biologist' class='job_option'>Biologist</option>
+            <option value = 'Social Activist' class='job_option'>Social Activist</option>
+            <option value = 'Architect' class='job_option'>Architect</option>
+            <option value = 'Singer' class='job_option'>Singer</option>
+            <option value = 'Geographer' class='job_option'>Geographer</option>
+            <option value = 'Nobleman' class='job_option'>Nobleman</option>
+            <option value = 'Actor' class='job_option'>Actor</option>
+            <option value = 'Chemist' class='job_option'>Chemist</option>
+            <option value = 'Sociologist' class='job_option'>Sociologist</option>
+            <option value = 'Producer' class='job_option'>Producer</option>
+            <option value = 'Artist' class='job_option'>Artist</option>
+            <option value = 'Musician' class='job_option'>Musician</option>
+            <option value = 'Sculptor' class='job_option'>Sculptor</option>
+            <option value = 'Film Director' class='job_option'>Film Director</option>
+            <option value = 'Extremist' class='job_option'>Extremist</option>
+            <option value = 'Pirate' class='job_option'>Pirate</option>
+            <option value = 'Soccer Player' class='job_option'>Soccer Player</option>
+            <option value = 'Diplomat' class='job_option'>Diplomat</option>
+            <option value = 'Engineer' class='job_option'>Engineer</option>
+            <option value = 'Fashion Designer' class='job_option'>Fashion Designer</option>
+            <option value = 'Mafioso' class='job_option'>Mafioso</option>
+            <option value = 'Dancer' class='job_option'>Dancer</option>
+            <option value = 'Linguist' class='job_option'>Linguist</option>
+            <option value = 'Public Worker' class='job_option'>Public Worker</option>
+            <option value = 'Businessperson' class='job_option'>Businessperson</option>
+            <option value = 'Designer' class='job_option'>Designer</option>
+            <option value = 'Archaeologist' class='job_option'>Archaeologist</option>
+            <option value = 'Boxer' class='job_option'>Boxer</option>
+            <option value = 'Astronaut' class='job_option'>Astronaut</option>
+            <option value = 'Presenter' class='job_option'>Presenter</option>
+            <option value = 'Lawyer' class='job_option'>Lawyer</option>
+            <option value = 'Conductor' class='job_option'>Conductor</option>
+            <option value = 'Racecar Driver' class='job_option'>Racecar Driver</option>
+            <option value = 'Comic Artist' class='job_option'>Comic Artist</option>
+            <option value = 'Geologist' class='job_option'>Geologist</option>
+            <option value = 'Photographer' class='job_option'>Photographer</option>
+            <option value = 'Journalist' class='job_option'>Journalist</option>
+            <option value = 'Celebrity' class='job_option'>Celebrity</option>
+            <option value = 'Critic' class='job_option'>Critic</option>
+            <option value = 'Pilot' class='job_option'>Pilot</option>
+            <option value = 'Computer Scientist' class='job_option'>Computer Scientist</option>
+            <option value = 'Martial Arts' class='job_option'>Martial Arts</option>
+            <option value = 'Coach' class='job_option'>Coach</option>
+            <option value = 'Wrestler' class='job_option'>Wrestler</option>
+            <option value = 'Chessmaster' class='job_option'>Chessmaster</option>
+            <option value = 'Mountaineer' class='job_option'>Mountaineer</option>
+            <option value = 'Magician' class='job_option'>Magician</option>
+            <option value = 'Political Scientist' class='job_option'>Political Scientist</option>
+            <option value = 'Anthropologist' class='job_option'>Anthropologist</option>
+            <option value = 'Statistician' class='job_option'>Statistician</option>
+            <option value = 'Judge' class='job_option'>Judge</option>
+            <option value = 'Baseball Player' class='job_option'>Baseball Player</option>
+            <option value = 'Swimmer' class='job_option'>Swimmer</option>
+            <option value = 'Cyclist' class='job_option'>Cyclist</option>
+            <option value = 'Basketball Player' class='job_option'>Basketball Player</option>
+            <option value = 'Athlete' class='job_option'>Athlete</option>
+            <option value = 'Tennis Player' class='job_option'>Tennis Player</option>
+            <option value = 'Model' class='job_option'>Model</option>
+            <option value = 'American Football Player' class='job_option'>American Football Player</option>
+            <option value = 'Pornographic Actor' class='job_option'>Pornographic Actor</option>
+            <option value = 'Comedian' class='job_option'>Comedian</option>
+            <option value = 'Game Designer' class='job_option'>Game Designer</option>
+            <option value = 'Chef' class='job_option'>Chef</option>
+            <option value = 'Skater' class='job_option'>Skater</option>
+            <option value = 'Skier' class='job_option'>Skier</option>
+            <option value = 'Gymnast' class='job_option'>Gymnast</option>
+            <option value = 'Referee' class='job_option'>Referee</option>
+            <option value = 'Hockey Player' class='job_option'>Hockey Player</option>
+            <option value = 'Cricketer' class='job_option'>Cricketer</option>
+            <option value = 'Golfer' class='job_option'>Golfer</option>
+            <option value = 'Snooker' class='job_option'>Snooker</option>
+        </datalist>
+        <div id="chloro"></div>
+    </div>
+    <!-- <div id="job_bar"></div> -->
+    <div id="pageviews">
+        <div class="subheading">Top 50 Historical Figures</div>
+        <div class="search">
+            <input class="search_input" name="top50_input" id="top50_input" list="top50_dl" placeholder="Search...">
+            <button class="button" id="top_50_go">Add</button>
+        </div>
+        <datalist id="top50_dl">
+            <option value="Muhammad">
+            <option value="Genghis Khan">
+            <option value="Leonardo Da Vinci">
+            <option value="Isaac Newton">
+            <option value="Ludwig van Beethoven">
+            <option value="Alexander the Great">
+            <option value="Aristotle">
+            <option value="Napoleon Bonaparte">
+            <option value="Julius Caesar">
+            <option value="Wolfgang Amadeus Mozart">
+            <option value="Plato">
+            <option value="Jesus Christ">
+            <option value="Adolf Hitler">
+            <option value="Galileo Galilei">
+            <option value="Marco Polo">
+            <option value="Socrates">
+            <option value="Donald Trump">
+            <option value="Johann Sebastian Bach">
+            <option value="Albert Einstein">
+            <option value="Michelangelo">
+            <option value="William Shakespeare">
+            <option value="Martin Luther">
+            <option value="Christopher Columbus">
+            <option value="Moses">
+            <option value="Archimedes">
+            <option value="Sigmund Freud">
+            <option value="Confucius">
+            <option value="Vincent van Gogh">
+            <option value="Nicolaus Copernicus">
+            <option value="Ferdinand Magellan">
+            <option value="Gautama Buddha">
+            <option value="Che Guevara">
+            <option value="Louis XIV of France">
+            <option value="Augustus">
+            <option value="Charles Darwin">
+            <option value="Karl Marx">
+            <option value="Mary">
+            <option value="Immanuel Kant">
+            <option value="Elizabeth II of the United Kingdom">
+            <option value="Saint Peter">
+            <option value="Dante">
+            <option value="René Descartes">
+            <option value="Thomas Jefferson">
+            <option value="Joseph Stalin">
+            <option value="Thomas Edison">
+            <option value="Vladimir Lenin">
+            <option value="Avicenna">
+            <option value="Joan of Arc">
+            <option value="Vasco da Gama">
+        </datalist>
         <div id="top50">
-            <input id="top50_input" list="top50_dl" placeholder="Search...">
-            <button id="top_50_go" >Go!</button>
-                <datalist id="top50_dl">
-                    <option value="Muhammad">
-                    <option value="Genghis Khan">
-                    <option value="Leonardo da Vinci">
-                    <option value="Isaac Newton">
-                    <option value="Ludwig van Beethoven">
-                    <option value="Alexander the Great">
-                    <option value="Aristotle">
-                    <option value="Napoleon">
-                    <option value="Julius Caesar">
-                    <option value="Wolfgang Amadeus Mozart">
-                    <option value="Plato">
-                    <option value="Jesus">
-                    <option value="Adolf Hitler">
-                    <option value="Galileo Galilei">
-                    <option value="Marco Polo">
-                    <option value="Socrates">
-                    <option value="Donald Trump">
-                    <option value="Johann Sebastian Bach">
-                    <option value="Albert Einstein">
-                    <option value="Michelangelo">
-                    <option value="William Shakespeare">
-                    <option value="Martin Luther">
-                    <option value="Christopher Columbus">
-                    <option value="Moses">
-                    <option value="Archimedes">
-                    <option value="Abraham">
-                    <option value="Sigmund Freud">
-                    <option value="Confucius">
-                    <option value="Vincent van Gogh">
-                    <option value="Nicolaus Copernicus">
-                    <option value="Ferdinand Magellan">
-                    <option value="Gautama Buddha">
-                    <option value="Che Guevara">
-                    <option value="Louis XIV of France">
-                    <option value="Augustus">
-                    <option value="Charles Darwin">
-                    <option value="Karl Marx">
-                    <option value="Mary, mother of Jesus">
-                    <option value="Immanuel Kant">
-                    <option value="Elizabeth II">
-                    <option value="Saint Peter">
-                    <option value="Dante Alighieri">
-                    <option value="René Descartes">
-                    <option value="Thomas Jefferson">
-                    <option value="Joseph Stalin">
-                    <option value="Thomas Edison">
-                    <option value="Vladimir Lenin">
-                    <option value="Avicenna">
-                    <option value="Joan of Arc">
-                    <option value="Vasco da Gama"> 
-                </datalist>
-            <img id = "fig_img" src= ""> 
-            <div id="top50_description">
-                
+            <div>            
+                <p class="subheading2">Average Pageviews 2008-2014</p>
+                <div id="top50_pv">
             </div>
         </div>
-        <div id="view"></div>
-        
-        <div id="hist_figures"></div>
-        <div id="pageviews"></div>
+
+            <ul id="current_figures">
+            </ul>
+            <div id=top50_description></div>
+        </div>
+    </div>
+    </div>
 
 
 
 
-        <script type="text/javascript">
-            var spec = "vega/hist_figures_map.vg.json";
-            vegaEmbed('#hist_figures', spec, opt = {
-                renderer: "svg",
-            }).then(function (result) {
-                // Access the Vega view instance (https://vega.github.io/vega/docs/api/view/) as result.view
-            }).catch(console.error);
 
-            // var spec1 = "vega/pageviews.vg.json";
+    <script type="text/javascript">
+        var spec = "vega/hist_figures_map.vg.json";
+        var bar = "vega/figures_by_job.vg.json";
+        var stream = "vega/pageviews.vg.json";
+        var pie = "vega/domain_pie.vg.json";
+        var chloro = "vega/chloro.vg.json"
+        vegaEmbed('#map', spec, opt = {
+            renderer: "svg",
+        }).then(function (result) {
+            // Access the Vega view instance (https://vega.github.io/vega/docs/api/view/) as result.view
+        }).catch(console.error);
+        vegaEmbed('#job_bar', bar, opt = {
+            renderer: "svg",
+        }).then(function (result) {
+
+        }).catch(console.error);
+        vegaEmbed('#stream', stream, opt = {
+            renderer: "svg"
+        }).then(function (result) {
+        }).catch(console.error);
+        vegaEmbed('#pie', pie, opt = {
+            renderer: "svg"
+        }).then(function (result) {
+        }).catch(console.error);
+        vegaEmbed('#chloro', chloro, opt = {
+            renderer: "svg"
+        }).then(function (result) {
+        }).catch(console.error);
+
             // vegaEmbed('#pageviews', spec1, opt = {
             //     renderer: "svg",
             // }).then(function (result) {
             //     // Access the Vega view instance (https://vega.github.io/vega/docs/api/view/) as result.view
             // }).catch(console.error);
-        </script>
-        <script src="data/top50descriptions/descriptions.js"></script>
-        <script src="vega/index.js"></script>
-        <script src="vega/top.js"></script>
-    </body>
+    </script>
+    <script src="data/top50descriptions/descriptions.js"></script>
+    <script src="vega/index.js"></script>
+    <script src="vega/top.js"></script>
+</body>
+
 </html>
